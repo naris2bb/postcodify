@@ -43,7 +43,7 @@ class Postcodify_Server
     // 인코딩의 경우 EUC-KR을 사용하려면 CP949라고 입력해 주어야 한다.
     // 새주소 중 EUC-KR에서 지원되지 않는 문자가 포함된 것도 있기 때문이다.
     
-    public function search($keywords, $encoding = 'UTF-8', $version = null)
+    public function search($keywords, $encoding = 'UTF-8', $limit=100, $offset=0, $version = null)
     {
         // 버전을 확인한다.
         
@@ -106,7 +106,7 @@ class Postcodify_Server
         if ($addresses === null)
         {
             $data_source = 'db';
-            list($addresses, $search_type, $search_error) = $this->get_addresses($q);
+            list($addresses, $search_type, $search_error) = $this->get_addresses($q, $limit, $offset);
         }
         
         // 오류가 발생한 경우 처리를 중단한다.
@@ -194,6 +194,10 @@ class Postcodify_Server
                 $record->other_addresses = $other_addresses;
                 $record->road_id = ($result->sort === 'POBOX') ? '' : substr($row->road_id, 0, 12);
                 $record->internal_id = strval($row->id);
+                
+                $record->sido_ko = $row->sido_ko;
+				$record->sigungu_ko = $row->sigungu_ko;
+				$record->dongri_ko = $row->dongri_ko;
             }
             elseif (version_compare($version, '1.8', '>='))
             {
@@ -255,7 +259,7 @@ class Postcodify_Server
     
     // 주어진 쿼리를 DB에서 실행하는 메소드.
     
-    protected function get_addresses($q)
+    protected function get_addresses($q, $limit=100, $offset=0)
     {
         // 반환할 변수들을 초기화한다.
         
@@ -343,7 +347,7 @@ class Postcodify_Server
                 
                 // 검색을 수행한다.
                 
-                $addresses = $this->_dbh->query($query, $joins, $conds, $args, $q->lang, $q->sort);
+                $addresses = $this->_dbh->query($query, $joins, $conds, $args, $q->lang, $q->sort, $limit, $offset);
             }
             
             // 지번주소로 검색하는 경우...
@@ -383,7 +387,7 @@ class Postcodify_Server
                 
                 // 일단 검색해 본다.
                 
-                $addresses = $this->_dbh->query($query, $joins, $conds, $args, $q->lang, $q->sort);
+                $addresses = $this->_dbh->query($query, $joins, $conds, $args, $q->lang, $q->sort, $limit, $offset);
                 
                 // 검색 결과가 없다면 건물명을 동리로 잘못 해석했을 수도 있으므로 건물명 검색을 다시 시도해 본다.
                 
@@ -397,7 +401,7 @@ class Postcodify_Server
                     $conds[] = 'pb.keyword LIKE ?';
                     $args[] = '%' . $q->dongri . '%';
                     
-                    $addresses = $this->_dbh->query($query, $joins, $conds, $args, $q->lang, $q->sort);
+                    $addresses = $this->_dbh->query($query, $joins, $conds, $args, $q->lang, $q->sort, $limit, $offset);
                     if (count($addresses))
                     {
                         $search_type = 'BUILDING';
@@ -418,7 +422,7 @@ class Postcodify_Server
                     $args[] = '%' . $building_name . '%';
                 }
                 
-                $addresses = $this->_dbh->query($query, $joins, $conds, $args, $q->lang, $q->sort);
+                $addresses = $this->_dbh->query($query, $joins, $conds, $args, $q->lang, $q->sort, $limit, $offset);
             }
             
             // 도로명 + 건물명으로 검색하는 경우...
@@ -437,7 +441,7 @@ class Postcodify_Server
                     $args[] = '%' . $building_name . '%';
                 }
                 
-                $addresses = $this->_dbh->query($query, $joins, $conds, $args, $q->lang, $q->sort);
+                $addresses = $this->_dbh->query($query, $joins, $conds, $args, $q->lang, $q->sort, $limit, $offset);
             }
             
             // 동리 + 건물명으로 검색하는 경우...
@@ -456,7 +460,7 @@ class Postcodify_Server
                     $args[] = '%' . $building_name . '%';
                 }
                 
-                $addresses = $this->_dbh->query($query, $joins, $conds, $args, $q->lang, $q->sort);
+                $addresses = $this->_dbh->query($query, $joins, $conds, $args, $q->lang, $q->sort, $limit, $offset);
             }
             
             // 사서함으로 검색하는 경우...
@@ -481,7 +485,7 @@ class Postcodify_Server
                     }
                 }
                 
-                $addresses = $this->_dbh->query($query, $joins, $conds, $args, $q->lang, $q->sort);
+                $addresses = $this->_dbh->query($query, $joins, $conds, $args, $q->lang, $q->sort, $limit, $offset);
             }
             
             // 읍면으로 검색하는 경우...
@@ -490,7 +494,7 @@ class Postcodify_Server
             {
                 $search_type = 'EUPMYEON';
                 $conds[] = 'pa.postcode5 IS NOT NULL';
-                $addresses = $this->_dbh->query($query, $joins, $conds, $args, $q->lang, $q->sort);
+                $addresses = $this->_dbh->query($query, $joins, $conds, $args, $q->lang, $q->sort, $limit, $offset);
                 
                 // 검색 결과가 없다면 건물명을 읍면으로 잘못 해석했을 수도 있으므로 건물명 검색을 다시 시도해 본다.
                 
@@ -504,7 +508,7 @@ class Postcodify_Server
                     $conds[] = 'pb.keyword LIKE ?';
                     $args[] = '%' . $q->eupmyeon . '%';
                     
-                    $addresses = $this->_dbh->query($query, $joins, $conds, $args, $q->lang, $q->sort);
+                    $addresses = $this->_dbh->query($query, $joins, $conds, $args, $q->lang, $q->sort, $limit, $offset);
                     if (count($addresses))
                     {
                         $search_type = 'BUILDING';

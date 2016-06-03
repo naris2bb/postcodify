@@ -26,6 +26,28 @@ require_once dirname(__FILE__) . '/autoload.php';
 // 검색 키워드, JSONP 콜백 함수명, 클라이언트 버전을 구한다.
 
 $keywords = isset($_GET['q']) ? trim($_GET['q']) : (isset($argv[1]) ? trim($argv[1], ' "\'') : '');
+
+//페이징 처리를 위한 page, rows를  받는다.
+$offset = 0;
+$limit = 100;
+{
+	$page = isset($_GET['p']) ? intval(trim($_GET['p'])) : 1;
+	$rows = isset($_GET['r']) ? intval(trim($_GET['r'])) : 100;
+	if ($page <= 0){
+		$page = 1;
+	}
+		
+	if($rows <=0 || $rows> 100){
+		$rows = 100; 
+	}
+	
+	$offset = ($page - 1) * $rows;
+	$limit = $rows;
+}
+
+
+
+
 $callback = isset($_GET['callback']) ? $_GET['callback'] : null;
 $client_version = isset($_GET['v']) ? trim($_GET['v']) : POSTCODIFY_VERSION;
 if (function_exists('get_magic_quotes_gpc') && @get_magic_quotes_gpc()) $keywords = stripslashes($keywords);
@@ -51,7 +73,9 @@ header('Content-Type: application/javascript; charset=UTF-8');
 header('Cache-Control: private, must-revalidate, post-check=0, pre-check=0');
 header('Expires: Sat, 01 Jan 2000 00:00:00 GMT');
 
-$result = $server->search($keywords, 'UTF-8', $client_version);
+// 페이징 처리를 위해 함수 변경
+//$result = $server->search($keywords, 'UTF-8', $client_version);
+$result = $server->search($keywords, 'UTF-8', $limit, $offset, $client_version);
 $json_options = (PHP_SAPI === 'cli' && defined('JSON_PRETTY_PRINT')) ? 384 : 0;
 echo ($callback ? ($callback . '(') : '') . json_encode($result, $json_options) . ($callback ? ');' : '') . "\n";
 exit;
