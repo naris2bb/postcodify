@@ -82,4 +82,9 @@ class Postcodify_Server_Record_v3 extends Postcodify_Server_Record
     public $other_addresses;
     public $road_id;
     public $internal_id;
+    
+    //Nuskin 용
+    public $sido_ko;
+    public $sigungu_ko;
+    public $dongri_ko;
 }
