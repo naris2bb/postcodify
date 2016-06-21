@@ -146,6 +146,29 @@ class Postcodify_Server_Database
         }
     }
     
+    public function queryCount($querystring, $joins, $conds, $args)
+    {
+    	// 쿼리를 조합한다.
+    
+    	$querystring = $querystring . ' ' . implode(' ', $joins) . ' WHERE ' . implode(' AND ', $conds);
+    
+    	// 쿼리를 실행한다.
+    
+    	switch ($this->_driver)
+    	{
+    		case 'pdo_sqlite':
+    			return $this->query_pdo_sqlite($querystring, $args);
+    		case 'pdo_mysql':
+    			return $this->query_pdo_mysql($querystring, $args);
+    		case 'mysqli':
+    			return $this->query_mysqli($querystring, $args);
+    		case 'mysql':
+    			return $this->query_mysql($querystring, $args);
+    		default:
+    			return 0;
+    	}
+    }
+    
     // 쿼리 메소드 (PDO/SQLite).
     
     protected function query_pdo_sqlite($querystring, $args)
