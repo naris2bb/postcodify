@@ -356,7 +356,7 @@ class Postcodify_Server
                 // 검색을 수행한다.
                 
                 $addresses = $this->_dbh->query($query, $joins, $conds, $args, $q->lang, $q->sort, $limit, $offset);
-                $addressTotalCount = ($this->_dbh->query($queryCount, $joins, $conds, $args));
+                $addressTotalCount = ($this->_dbh->queryCount($queryCount, $joins, $conds, $args));
             }
             
             // 지번주소로 검색하는 경우...
@@ -397,7 +397,7 @@ class Postcodify_Server
                 // 일단 검색해 본다.
                 
                 $addresses = $this->_dbh->query($query, $joins, $conds, $args, $q->lang, $q->sort, $limit, $offset);
-                $addressTotalCount = $this->_dbh->query($queryCount, $joins, $conds, $args);
+                $addressTotalCount = $this->_dbh->queryCount($queryCount, $joins, $conds, $args);
                 
                 // 검색 결과가 없다면 건물명을 동리로 잘못 해석했을 수도 있으므로 건물명 검색을 다시 시도해 본다.
                 
@@ -412,7 +412,7 @@ class Postcodify_Server
                     $args[] = '%' . $q->dongri . '%';
                     
                     $addresses = $this->_dbh->query($query, $joins, $conds, $args, $q->lang, $q->sort, $limit, $offset);
-                    $addressTotalCount = $this->_dbh->query($queryCount, $joins, $conds, $args);
+                    $addressTotalCount = $this->_dbh->queryCount($queryCount, $joins, $conds, $args);
                     if (count($addresses))
                     {
                         $search_type = 'BUILDING';
@@ -434,7 +434,7 @@ class Postcodify_Server
                 }
                 
                 $addresses = $this->_dbh->query($query, $joins, $conds, $args, $q->lang, $q->sort, $limit, $offset);
-                $addressTotalCount = $this->_dbh->query($queryCount, $joins, $conds, $args);
+                $addressTotalCount = $this->_dbh->queryCount($queryCount, $joins, $conds, $args);
             }
             
             // 도로명 + 건물명으로 검색하는 경우...
@@ -454,7 +454,7 @@ class Postcodify_Server
                 }
                 
                 $addresses = $this->_dbh->query($query, $joins, $conds, $args, $q->lang, $q->sort, $limit, $offset);
-                $addressTotalCount = $this->_dbh->query($queryCount, $joins, $conds, $args);
+                $addressTotalCount = $this->_dbh->queryCount($queryCount, $joins, $conds, $args);
             }
             
             // 동리 + 건물명으로 검색하는 경우...
@@ -474,7 +474,7 @@ class Postcodify_Server
                 }
                 
                 $addresses = $this->_dbh->query($query, $joins, $conds, $args, $q->lang, $q->sort, $limit, $offset);
-                $addressTotalCount = $this->_dbh->query($queryCount, $joins, $conds, $args);
+                $addressTotalCount = $this->_dbh->queryCount($queryCount, $joins, $conds, $args);
             }
             
             // 사서함으로 검색하는 경우...
@@ -500,7 +500,7 @@ class Postcodify_Server
                 }
                 
                 $addresses = $this->_dbh->query($query, $joins, $conds, $args, $q->lang, $q->sort, $limit, $offset);
-                $addressTotalCount = $this->_dbh->query($queryCount, $joins, $conds, $args);
+                $addressTotalCount = $this->_dbh->queryCount($queryCount, $joins, $conds, $args);
             }
             
             // 읍면으로 검색하는 경우...
@@ -510,7 +510,7 @@ class Postcodify_Server
                 $search_type = 'EUPMYEON';
                 $conds[] = 'pa.postcode5 IS NOT NULL';
                 $addresses = $this->_dbh->query($query, $joins, $conds, $args, $q->lang, $q->sort, $limit, $offset);
-                $addressTotalCount = $this->_dbh->query($queryCount, $joins, $conds, $args);
+                $addressTotalCount = $this->_dbh->queryCount($queryCount, $joins, $conds, $args);
                 
                 // 검색 결과가 없다면 건물명을 읍면으로 잘못 해석했을 수도 있으므로 건물명 검색을 다시 시도해 본다.
                 
@@ -525,7 +525,7 @@ class Postcodify_Server
                     $args[] = '%' . $q->eupmyeon . '%';
                     
                     $addresses = $this->_dbh->query($query, $joins, $conds, $args, $q->lang, $q->sort, $limit, $offset);
-                    $addressTotalCount = $this->_dbh->query($queryCount, $joins, $conds, $args);
+                    $addressTotalCount = $this->_dbh->queryCount($queryCount, $joins, $conds, $args);
                     if (count($addresses))
                     {
                         $search_type = 'BUILDING';
