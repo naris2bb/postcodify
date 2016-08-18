@@ -204,6 +204,8 @@ class Postcodify_Server
                 $record->sido_ko = $row->sido_ko;
 				$record->sigungu_ko = $row->sigungu_ko;
 				$record->dongri_ko = $row->dongri_ko;
+				
+				$record->region = $this->get_region($row->sido_ko);
             }
             elseif (version_compare($version, '1.8', '>='))
             {
@@ -261,6 +263,32 @@ class Postcodify_Server
         // 결과를 반환한다.
         
         return $result;
+    }
+    
+    //시도에 따른 region 코드 부여
+    protected function get_region($sido_ko){
+    	
+    	switch ($sido_ko)
+        {
+            case '강원도' : return 'GA';
+            case '경기도' : return 'KG';
+            case '경상남도' : return 'GY';
+            case '경상북도' : return 'GN';
+            case '광주광역시' : return 'KW';
+            case '대구광역시' : return 'DG';
+            case '대전광역시' : return 'DJ';
+            case '부산광역시' : return 'BU';
+            case '서울특별시' : return 'SE';
+            case '세종특별자치시' : return 'SJ';
+            case '울산광역시' : return 'UL';
+            case '인천광역시' : return 'IN';
+            case '전라남도' : return 'JN';
+            case '전라북도' : return 'JB';
+            case '제주특별자치도' : return 'JJ';
+            case '충청남도' : return 'CN';
+            case '충청북도' : return 'CB';
+            default : return '';
+        }
     }
     
     // 주어진 쿼리를 DB에서 실행하는 메소드.

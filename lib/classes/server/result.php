@@ -87,4 +87,5 @@ class Postcodify_Server_Record_v3 extends Postcodify_Server_Record
     public $sido_ko;
     public $sigungu_ko;
     public $dongri_ko;
+    public $region;
 }
