@@ -300,6 +300,7 @@ class Postcodify_Server
 	    	
 	    	return $ko_doro . $doro_dong_arr[0]; //0번째에 무조건 동이 있을 것으로 감안한 소스 (뉴스킨 측과 협의 된 내용)
     	}
+    	
     	return $ko_doro;
     }
     
