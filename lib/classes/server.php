@@ -204,7 +204,7 @@ class Postcodify_Server
                 $record->sido_ko = $row->sido_ko;
 				$record->sigungu_ko = $row->sigungu_ko;
 				$record->dongri_ko = $row->dongri_ko;
-				$record->ko_doro_dongri = $this->get_doro_dongri($ko_doro, $other_addresses);
+				$record->ko_doro_dongri = $this->get_doro_dongri($ko_doro, $ko_jibeon, $record->building_name, $record->building_nums);
 				$record->region = $this->get_region($row->sido_ko);
             }
             elseif (version_compare($version, '1.8', '>='))
@@ -292,16 +292,18 @@ class Postcodify_Server
     }
     
     //도로명에 번지주소의 동을 붙인다. (택배사의 편의를 위해) 
-    protected function get_doro_dongri($ko_doro, $other_addresses){
+    protected function get_doro_dongri($ko_doro, $ko_jibeon, $buildingName, $buildingNums){
     	
-    	if($other_addresses !== null && $other_addresses !== ''){
+    	$extraText = $ko_jibeon;
     		
-	    	$doro_dong_arr = explode(';', $other_addresses);
-	    	
-	    	return $ko_doro . ' (' . $doro_dong_arr[0] . ')'; //0번째에 무조건 동이 있을 것으로 감안한 소스 (뉴스킨 측과 협의 된 내용)
+    	if ($buildingName !== "" && $buildingName !== null) {
+    		$extraText .= ", " + $buildingName;
+    		if ($buildingNums !== "") {
+    			$extraText .= " " + $buildingNums;
+    		}
     	}
-    	
-    	return $ko_doro;
+    	 
+    	return $ko_doro . ' (' . $extraText . ')';
     }
     
     // 주어진 쿼리를 DB에서 실행하는 메소드.
