@@ -149,6 +149,7 @@ class Postcodify_Server
             
             $ko_common = trim($row->sido_ko . ' ' . ($row->sigungu_ko ? ($row->sigungu_ko . ' ') : '') .
                 ($row->ilbangu_ko ? ($row->ilbangu_ko . ' ') : '') . ($row->eupmyeon_ko ? ($row->eupmyeon_ko . ' ') : ''));
+            $ko_eupmyeon = ($row->eupmyeon_ko ? ($row->eupmyeon_ko ) : '');
             $ko_doro = trim($row->road_name_ko . ' ' . ($row->is_basement ? '지하 ' : '') .
                 ($row->num_major ? $row->num_major : '') . ($row->num_minor ? ('-' . $row->num_minor) : ''));
             $ko_jibeon = trim($row->dongri_ko . ' ' . ($row->is_mountain ? '산' : '') .
@@ -206,6 +207,7 @@ class Postcodify_Server
 				$record->dongri_ko = $row->dongri_ko;
 				$record->ko_doro_dongri = $this->get_doro_dongri($ko_doro, $ko_jibeon, $record->building_name, $record->building_nums);
 				$record->region = $this->get_region($row->sido_ko);
+				$record->ko_eupmyeon = $ko_eupmyeon;
             }
             elseif (version_compare($version, '1.8', '>='))
             {
