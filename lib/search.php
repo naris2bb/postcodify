@@ -29,16 +29,16 @@ $keywords = isset($_GET['q']) ? trim($_GET['q']) : (isset($argv[1]) ? trim($argv
 
 //페이징 처리를 위한 page, rows를  받는다.
 $offset = 0;
-$limit = 100;
+$limit = 100000; //SAP로 인해 100에서 십만으로 변경
 {
 	$page = isset($_GET['p']) ? intval(trim($_GET['p'])) : 1;
-	$rows = isset($_GET['r']) ? intval(trim($_GET['r'])) : 100;
+	$rows = isset($_GET['r']) ? intval(trim($_GET['r'])) : 100000;
 	if ($page <= 0){
 		$page = 1;
 	}
 		
-	if($rows <=0 || $rows> 100){
-		$rows = 100; 
+	if($rows <=0 || $rows> 100000){
+		$rows = 100000;
 	}
 	
 	$offset = ($page - 1) * $rows;

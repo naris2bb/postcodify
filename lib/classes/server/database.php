@@ -107,7 +107,7 @@ class Postcodify_Server_Database
     
     // 쿼리 메소드.
     
-    public function query($querystring, $joins, $conds, $args, $lang = 'KO', $sort = 'JUSO', $limit = 100, $offset = 0)
+    public function query($querystring, $joins, $conds, $args, $lang = 'KO', $sort = 'JUSO', $limit = 100000, $offset = 0)
     {
         // 쿼리를 조합한다.
         

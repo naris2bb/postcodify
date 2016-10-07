@@ -43,7 +43,7 @@ class Postcodify_Server
     // 인코딩의 경우 EUC-KR을 사용하려면 CP949라고 입력해 주어야 한다.
     // 새주소 중 EUC-KR에서 지원되지 않는 문자가 포함된 것도 있기 때문이다.
     
-    public function search($keywords, $encoding = 'UTF-8', $limit=100, $offset=0, $version = null)
+    public function search($keywords, $encoding = 'UTF-8', $limit=100000, $offset=0, $version = null)
     {
         // 버전을 확인한다.
         
@@ -310,7 +310,7 @@ class Postcodify_Server
     
     // 주어진 쿼리를 DB에서 실행하는 메소드.
     
-    protected function get_addresses($q, $limit=100, $offset=0)
+    protected function get_addresses($q, $limit=100000, $offset=0)
     {
         // 반환할 변수들을 초기화한다.
         $addressTotalCount = 0;
