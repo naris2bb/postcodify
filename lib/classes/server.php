@@ -293,16 +293,16 @@ class Postcodify_Server
         }
     }
     
-    //도로명에 번지주소의 동을 붙인다. (택배사의 편의를 위해) 
+    //도로명에 번지주소의 동과 빌딩명을 붙인다. (택배사와 사용자의 편의를 위해) 
     protected function get_doro_dongri($ko_doro, $ko_jibeon, $buildingName, $buildingNums){
     	
     	$extraText = $ko_jibeon;
     		
     	if ($buildingName !== "" && $buildingName !== null) {
-    		$extraText .= ", " + $buildingName;
-    		if ($buildingNums !== "") {
-    			$extraText .= " " + $buildingNums;
-    		}
+    		$extraText .= (", " . $buildingName);
+    		/* if ($buildingNums !== "" && $buildingNums !== null) {
+    			$extraText .= (" " . $buildingNums);
+    		} */
     	}
     	 
     	return $ko_doro . ' (' . $extraText . ')';
