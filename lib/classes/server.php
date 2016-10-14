@@ -205,7 +205,7 @@ class Postcodify_Server
                 $record->sido_ko = $row->sido_ko;
 				$record->sigungu_ko = $row->sigungu_ko;
 				$record->dongri_ko = $row->dongri_ko;
-				$record->ko_doro_dongri = $this->get_doro_dongri($ko_doro, $ko_jibeon, $record->building_name, $record->building_nums);
+				$record->ko_doro_dongri = $this->get_doro_dongri($ko_doro, $ko_jibeon, $record->dongri_ko, $record->building_name, $record->building_nums);
 				$record->region = $this->get_region($row->sido_ko);
 				$record->ko_eupmyeon = $ko_eupmyeon;
             }
@@ -294,11 +294,13 @@ class Postcodify_Server
     }
     
     //도로명에 번지주소의 동과 빌딩명을 붙인다. (택배사와 사용자의 편의를 위해) 
-    protected function get_doro_dongri($ko_doro, $ko_jibeon, $buildingName, $buildingNums){
+    protected function get_doro_dongri($ko_doro, $ko_jibeon, $dongri_ko, $buildingName, $buildingNums){
     	
     	$extraText = $ko_jibeon;
     		
     	if ($buildingName !== "" && $buildingName !== null) {
+    		//빌딩명이 있을 경우 지번이 아닌 dongri_ko 필드를 사용하도록 한다.
+    		$extraText = $dongri_ko;
     		$extraText .= (", " . $buildingName);
     		/* if ($buildingNums !== "" && $buildingNums !== null) {
     			$extraText .= (" " . $buildingNums);
