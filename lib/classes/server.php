@@ -135,9 +135,11 @@ class Postcodify_Server
         $result->type = $search_type;
         $result->cache = $data_source === 'cache' ? 'HIT' : 'MISS';
         
-        foreach ($addressTotalCount as $row)
-        {
-        	$result->totalDataCount = intval($row->totalDataCount);
+        if(!empty($addressTotalCount)){
+	        foreach ($addressTotalCount as $row)
+	        {
+	        	$result->totalDataCount = intval($row->totalDataCount);
+	        }
         }
         
         
