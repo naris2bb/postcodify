@@ -205,7 +205,7 @@ class Postcodify_Server
                 $record->internal_id = strval($row->id);
                 
                 $record->sido_ko = $row->sido_ko;
-				$record->sigungu_ko = $row->sigungu_ko;
+				$record->sigungu_ko = $row->sigungu_ko . " " . ($row->ilbangu_ko ? ($row->ilbangu_ko) : '');
 				$record->dongri_ko = $row->dongri_ko;
 				$record->ko_doro_dongri = $this->get_doro_dongri($ko_doro, $ko_jibeon, $record->dongri_ko, $record->building_name, $record->building_nums);
 				$record->region = $this->get_region($row->sido_ko);
